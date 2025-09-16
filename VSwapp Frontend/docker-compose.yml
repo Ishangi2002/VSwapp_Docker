@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  vswapp-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vswapp-devops
+    container_name: vswapp-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      - PORT=5173
+    # Add volumes for hot reloading in development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    # Enable watching for file changes
+    stdin_open: true
+    tty: true

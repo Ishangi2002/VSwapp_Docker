@@ -1,4 +1,10 @@
+# Stage 1: Build JAR
+FROM maven:3.9.9-eclipse-temurin-17-alpine AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run JAR
 FROM openjdk:17-jdk-alpine
-ARG JAR_FILE=target/*.jar
-COPY target/vswapp-backend-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]

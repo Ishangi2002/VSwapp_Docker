@@ -22,12 +22,13 @@ services:
   #  Backend (Spring Boot)
   # ==========================
   vswapp-backend:
-    build:
-      context: ./vswapp-backend
-      dockerfile: Dockerfile
+    image: ishangi1120/vswapp-backend
+    #build:
+      #context: ./vswapp-backend
+      #dockerfile: Dockerfile
     container_name: vswapp-backend
     ports:
-      - "8080:8080"        # Changed to 8081 to avoid Jenkins conflict
+      - "8080:8080"       
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/Vswappdb
       SPRING_DATASOURCE_USERNAME: root
@@ -46,10 +47,10 @@ services:
   #  Frontend (React/Vite)
   # ==========================
   vswapp-frontend:
-    build:
-      context: ./vswapp-frontend
-      dockerfile: Dockerfile
-    image: vswapp-devops
+    #build:
+      #context: ./vswapp-frontend
+      #dockerfile: Dockerfile
+    image: ishangi1120/vswapp-frontend
     container_name: vswapp-frontend
     ports:
       - "5173:5173"

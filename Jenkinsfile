@@ -13,7 +13,7 @@ pipeline {
         stage('Checkout Source Code') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/ishangi1120/your-repo.git'
+                    url: 'https://github.com/ishangi1120/VSwapp_Docker.git'
             }
         }
 

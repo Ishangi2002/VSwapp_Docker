@@ -2,64 +2,53 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "ishangi1120"
-        BACKEND_IMAGE = "vswapp-backend"
-        FRONTEND_IMAGE = "vswapp-frontend"
-        DOCKERHUB_CREDENTIALS = "dockerhub-creds"   
+        BACKEND_IMAGE = "ishangi1120/vswapp-backend:latest"
+        FRONTEND_IMAGE = "ishangi1120/vswapp-frontend:latest"
     }
 
     stages {
-
-        stage('Checkout Source Code') {
+        stage('Checkout Code') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/ishangi1120/VSwapp_Docker.git'
+                // Clone public GitHub repo (no credentials needed)
+                git url: 'https://github.com/ishangi1120/VSwapp_Docker.git'
             }
         }
 
         stage('Build Docker Images') {
             steps {
                 script {
-                    sh "docker build -t ${REGISTRY}/${BACKEND_IMAGE}:latest backend/"
-                    sh "docker build -t ${REGISTRY}/${FRONTEND_IMAGE}:latest frontend/"
+                    // Build backend image
+                    sh "docker build -t $BACKEND_IMAGE ./backend"
+
+                    // Build frontend image
+                    sh "docker build -t $FRONTEND_IMAGE ./frontend"
                 }
             }
         }
 
-        stage('Push Images to Docker Hub') {
+        stage('Login to Docker Hub') {
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS,
-                                                      usernameVariable: 'USER',
-                                                      passwordVariable: 'PASS')]) {
-
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-
-                        sh "docker push ${REGISTRY}/${BACKEND_IMAGE}:latest"
-                        sh "docker push ${REGISTRY}/${FRONTEND_IMAGE}:latest"
-                    }
+                // Use Docker Hub credentials to login
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', 
+                                                  usernameVariable: 'DOCKER_USER', 
+                                                  passwordVariable: 'DOCKER_PASS')]) {
+                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
                 }
             }
         }
 
-        stage('Deploy Containers') {
+        stage('Push Docker Images') {
             steps {
-                script {
-                    sh 'docker rm -f vswapp-backend || true'
-                    sh 'docker rm -f vswapp-frontend || true'
-
-                    sh "docker pull ${REGISTRY}/${BACKEND_IMAGE}:latest"
-                    sh "docker pull ${REGISTRY}/${FRONTEND_IMAGE}:latest"
-
-                    sh "docker run -d --name vswapp-backend -p 8080:8080 ${REGISTRY}/${BACKEND_IMAGE}:latest"
-                    sh "docker run -d --name vswapp-frontend -p 5173:5173 ${REGISTRY}/${FRONTEND_IMAGE}:latest"
-                }
+                sh "docker push $BACKEND_IMAGE"
+                sh "docker push $FRONTEND_IMAGE"
             }
         }
     }
 
     post {
-        success { echo 'Pipeline Completed Successfully!' }
-        failure { echo 'Pipeline Failed!' }
+        always {
+            // Logout from Docker
+            sh "docker logout"
+        }
     }
 }

@@ -5,7 +5,7 @@ pipeline {
         REGISTRY = "ishangi1120"
         BACKEND_IMAGE = "vswapp-backend"
         FRONTEND_IMAGE = "vswapp-frontend"
-        DOCKERHUB_CREDENTIALS = "dockerhub-creds"  
+        DOCKERHUB_CREDENTIALS = "dockerhub-creds"   
     }
 
     stages {

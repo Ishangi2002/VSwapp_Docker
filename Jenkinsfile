@@ -30,6 +30,7 @@ pipeline {
             steps {
                 echo 'Logging in to Docker Hub...'
                 withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDS}", usernameVariable: 'DH_USER', passwordVariable: 'DH_PASS')]) {
+                    // Using Personal Access Token as password
                     sh 'echo $DH_PASS | docker login -u $DH_USER --password-stdin'
 
                     echo 'Pushing backend image...'

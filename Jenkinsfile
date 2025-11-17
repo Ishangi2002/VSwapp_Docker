@@ -6,7 +6,6 @@ pipeline {
         DOCKERHUB_USER  = 'ishangi1120'      
         BACKEND_IMAGE   = "${DOCKERHUB_USER}/vswapp-backend:latest"
         FRONTEND_IMAGE  = "${DOCKERHUB_USER}/vswapp-frontend:latest"
-        REPO_DIR        = 'VSwapp-Docker-Deploy' 
     }
 
     stages {
@@ -15,25 +14,17 @@ pipeline {
                 echo 'Checking out code...'
                 checkout scm
                 
-            
-                echo "Listing workspace contents:"
-                sh 'ls -la'
-                echo "Listing repo contents:"
-                sh "ls -la ${REPO_DIR}"
             }
         }
 
         stage('Build Docker Images') {
             steps {
                 
-                dir("${REPO_DIR}") {
-                    echo 'Building backend image...'
-                   
-                    sh 'docker build -t backend-image ./VSwapp-backend'
+                echo 'Building backend image...'
+                sh 'docker build -t backend-image ./vswapp-backend'
 
-                    echo 'Building frontend image...'
-                    sh 'docker build -t frontend-image ./VSwapp-frontend'
-                }
+                echo 'Building frontend image...'
+                sh 'docker build -t frontend-image ./vswapp-frontend'
             }
         }
 
@@ -64,15 +55,12 @@ pipeline {
         stage('Deploy Containers') {
             steps {
                 
-                dir("${REPO_DIR}") {
-                    echo 'Removing old containers if they exist...'
-                    
-                    sh 'docker-compose down || true'
-                    sh 'docker rm -f vswapp-backend-c vswapp-frontend-c || true'
+                echo 'Removing old containers if they exist...'
+                sh 'docker-compose down || true'
+                sh 'docker rm -f vswapp-backend-c vswapp-frontend-c || true'
 
-                    echo 'Deploying containers with Docker Compose...'
-                    sh 'docker-compose up -d --build'
-                }
+                echo 'Deploying containers with Docker Compose...'
+                sh 'docker-compose up -d --build'
             }
         }
     }
@@ -83,10 +71,8 @@ pipeline {
             sh 'docker image prune -f'
             
             
-            dir("${REPO_DIR}") {
-                echo 'Stopping and removing containers...'
-                sh 'docker-compose down || true'
-            }
+            echo 'Stopping and removing containers...'
+            sh 'docker-compose down || true'
         }
     }
 }

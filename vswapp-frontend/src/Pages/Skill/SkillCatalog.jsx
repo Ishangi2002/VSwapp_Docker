@@ -12,13 +12,8 @@ export const SkillCatalog = () => {
   // Hardcoded EC2 IP Address
   const BASE_URL = "http://43.205.199.30:8080";
 
-  /**
-   * Helper to format image URLs correctly.
-   * Returns null if no path exists to prevent browser console warnings.
-   */
   const getImageUrl = (path) => {
-    if (!path) return null; // Fix: return null instead of ""
-    
+    if (!path) return "";
     if (path.includes("localhost:8080")) {
       return path.replace("http://localhost:8080", BASE_URL);
     }
@@ -58,7 +53,6 @@ export const SkillCatalog = () => {
         </div>
 
         <div className="flex ml-24 mt-8 gap-8">
-          {/* Sidebar Filter */}
           <div className="bg-indigo-950 p-8 rounded-3xl shadow-lg w-[350px] h-[650px] flex-shrink-0">
             <FilterBox
               selectedCategories={selectedCategories}
@@ -68,47 +62,32 @@ export const SkillCatalog = () => {
             />
           </div>
 
-          {/* Skills Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {filteredSkills.map((skill) => {
-              const imageUrl = getImageUrl(skill.imagePath);
-
-              return (
-                <div
-                  key={skill.id}
-                  className="bg-indigo-950 rounded-3xl shadow-lg w-[320px] h-[250px] flex flex-col justify-between overflow-hidden"
-                >
-                  <div className="w-full h-[180px] bg-gray-800">
-                    {/* Fix: Only render img tag if imageUrl is not null */}
-                    {imageUrl ? (
-                      <img
-                        src={imageUrl}
-                        alt={skill.title}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.onerror = null; 
-                          e.target.src = "https://placehold.co/320x180?text=Skill+Image";
-                        }}
-                      />
-                    ) : (
-                      // Placeholder while loading or if image is missing
-                      <div className="w-full h-full flex items-center justify-center text-gray-500 italic">
-                        No Image Available
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex justify-between items-center px-4 py-3 bg-indigo-900/50">
-                    <span className="text-base font-medium">{skill.title}</span>
-                    <Link to="/contact">
-                      <span className="text-base cursor-pointer text-blue-400 hover:text-blue-300 transition-colors">
-                        Join
-                      </span>
-                    </Link>
-                  </div>
+            {filteredSkills.map((skill) => (
+              <div
+                key={skill.id}
+                className="bg-indigo-950 rounded-3xl shadow-lg w-[320px] h-[250px] flex flex-col justify-between"
+              >
+                <div className="w-full h-[180px] rounded-3xl overflow-hidden bg-gray-800">
+                  <img
+                    src={getImageUrl(skill.imagePath)}
+                    alt={skill.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null; 
+                      // Using a different service or a local asset is safer if placeholder.com fails
+                      e.target.src = "https://placehold.co/320x180?text=Skill+Image";
+                    }}
+                  />
                 </div>
-              );
-            })}
+                <div className="flex justify-between items-center px-4 py-2 ">
+                  <span className="text-base font-medium">{skill.title}</span>
+                  <Link to="/contact">
+                    <span className="text-base cursor-pointer hover:text-blue-400">Join</span>
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

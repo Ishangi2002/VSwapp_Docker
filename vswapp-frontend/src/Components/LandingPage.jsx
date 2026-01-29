@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
 import HowItWorks from "./HowItWorks";
 import TrendingSkills from "./TrendingSkills";
-import { OurValues } from "./OurValues";
+import  OurValues  from "./OurValues";
 import CommunityFeedback from "./CommunityFeedback";
 import { Footer } from "./Footer";
 

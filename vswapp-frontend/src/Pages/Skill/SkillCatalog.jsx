@@ -13,11 +13,16 @@ export const SkillCatalog = () => {
   const BASE_URL = "http://43.205.199.30:8080";
 
   const getImageUrl = (path) => {
-    if (!path) return "";
-    if (path.includes("localhost:8080")) {
-      return path.replace("http://localhost:8080", BASE_URL);
-    }
-    return path.startsWith("http") ? path : `${BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
+    if (!path) return "https://placehold.co/320x180/0f172a/64748b?text=No+Image";
+    
+    // Remove local development strings if they exist in the DB
+    let cleanPath = path.replace("http://localhost:8080", "");
+    
+    // Ensure the path starts with a single slash
+    const formattedPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
+    
+    // Construct final URL pointing to EC2
+    return `${BASE_URL}${formattedPath}`;
   };
 
   useEffect(() => {
@@ -45,45 +50,51 @@ export const SkillCatalog = () => {
   }, [selectedCategories, selectedLevels, skills]);
 
   return (
-    <section className="py-16">
-      <div className="bg-gradient-to-b from-[#090e2d] to-[#111827] min-h-screen text-white">
-        <div className="text-3xl text-center">
-          <h4>Skills Catalog</h4>
-          <hr className="w-[80px] border-t-2 border-blue-500 mx-auto mt-3" />
+    <section className="bg-[#030712] min-h-screen py-16 px-4 md:px-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-white">Skills Catalog</h2>
+          <div className="w-20 h-1 bg-blue-500 mx-auto mt-4 rounded-full"></div>
         </div>
 
-        <div className="flex ml-24 mt-8 gap-8">
-          <div className="bg-indigo-950 p-8 rounded-3xl shadow-lg w-[350px] h-[650px] flex-shrink-0">
+        <div className="flex flex-col lg:flex-row gap-10">
+          {/* Sidebar Filter - Matching the Indigo/Blue theme */}
+          <aside className="bg-[#0f172a] p-8 rounded-3xl border border-blue-900/30 shadow-xl w-full lg:w-[320px] h-fit">
             <FilterBox
               selectedCategories={selectedCategories}
               setSelectedCategories={setSelectedCategories}
               selectedLevels={selectedLevels}
               setSelectedLevels={setSelectedLevels}
             />
-          </div>
+          </aside>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {/* Skills Grid */}
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
             {filteredSkills.map((skill) => (
               <div
                 key={skill.id}
-                className="bg-indigo-950 rounded-3xl shadow-lg w-[320px] h-[250px] flex flex-col justify-between"
+                className="group bg-[#0f172a] rounded-3xl border border-blue-900/20 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-blue-500/50 shadow-lg"
               >
-                <div className="w-full h-[180px] rounded-3xl overflow-hidden bg-gray-800">
+                <div className="w-full h-[200px] overflow-hidden bg-slate-800">
                   <img
                     src={getImageUrl(skill.imagePath)}
                     alt={skill.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     onError={(e) => {
                       e.target.onerror = null; 
-                      // Using a different service or a local asset is safer if placeholder.com fails
-                      e.target.src = "https://placehold.co/320x180?text=Skill+Image";
+                      e.target.src = "https://placehold.co/320x180/1e293b/475569?text=Image+Not+Found";
                     }}
                   />
                 </div>
-                <div className="flex justify-between items-center px-4 py-2 ">
-                  <span className="text-base font-medium">{skill.title}</span>
+                
+                <div className="p-6 flex justify-between items-center">
+                  <span className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors">
+                    {skill.title}
+                  </span>
                   <Link to="/contact">
-                    <span className="text-base cursor-pointer hover:text-blue-400">Join</span>
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl transition-all text-sm font-medium shadow-md">
+                      Join
+                    </button>
                   </Link>
                 </div>
               </div>

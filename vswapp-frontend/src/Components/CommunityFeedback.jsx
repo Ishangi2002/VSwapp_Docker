@@ -21,7 +21,7 @@ const CommunityFeedback = () => {
     /* py-20 provides consistent vertical spacing between sections */
     <section className="py-20 px-6 text-center">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-white mb-16">
+        <h2 className="text-4xl text-white mb-16">
           Community Feedback
         </h2>
 

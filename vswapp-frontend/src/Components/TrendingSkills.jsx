@@ -14,7 +14,7 @@ const TrendingSkills = () => {
     <section className="pt-0 px-6 text-center overflow-x-hidden">
 
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-white mb-16">Trending Skills</h2>
+        <h2 className="text-4xl text-white mb-16">Trending Skills</h2>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
           {skills.map((skill, i) => (

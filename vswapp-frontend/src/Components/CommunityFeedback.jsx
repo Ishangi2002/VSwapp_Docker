@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-export const CommunityFeedback = () => {
+const CommunityFeedback = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const BASE_URL = "http://43.205.199.30:8080";
 
@@ -31,3 +31,4 @@ export const CommunityFeedback = () => {
     </section>
   );
 };
+export default CommunityFeedback;

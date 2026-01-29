@@ -25,7 +25,7 @@ export const ProfilePage = () => {
     if (path.includes("localhost:8080")) {
       return path.replace("http://localhost:8080", BASE_URL);
     }
-    return path;
+   return path.startsWith("http") ? path : `${BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
   };
 
   useEffect(() => {

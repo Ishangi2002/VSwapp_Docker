@@ -9,10 +9,26 @@ export const SkillCatalog = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedLevels, setSelectedLevels] = useState([]);
 
+  // Hardcoded EC2 IP Address for the images to load correctly
+  const BASE_URL = "http://43.205.199.30:8080";
+
+  // Helper function to redirect image requests from localhost to EC2
+  const getImageUrl = (path) => {
+    if (!path) return null;
+    if (path.includes("localhost:8080")) {
+      return path.replace("http://localhost:8080", BASE_URL);
+    }
+    // In case the path is relative (/uploads/...)
+    if (path.startsWith("/")) {
+      return `${BASE_URL}${path}`;
+    }
+    return path;
+  };
+
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const res = await axios.get(`http://43.205.199.30:8080/api/skill`);
+        const res = await axios.get(`${BASE_URL}/api/skill`);
         setSkills(res.data);
         setFilteredSkills(res.data); 
       } catch (err) {
@@ -64,13 +80,19 @@ export const SkillCatalog = () => {
                 className="bg-indigo-950 text-white rounded-3xl shadow-lg w-[320px] h-[250px] flex flex-col justify-between"
               >
                 <img
-                  src={skill.imagePath}
+                  src={getImageUrl(skill.imagePath)}
                   alt={skill.title}
                   className="w-full h-[180px] rounded-3xl object-cover"
+                  onError={(e) => {
+                    // Fallback if the image still fails to load
+                    e.target.src = "https://via.placeholder.com/320x180?text=No+Image";
+                  }}
                 />
                 <div className="flex justify-between items-center px-4 py-2 ">
                   <span className="text-base">{skill.title}</span>
-                  <Link to="/contact"><span className="text-base cursor-pointer">Join</span></Link>
+                  <Link to="/contact">
+                    <span className="text-base cursor-pointer hover:text-blue-400 transition">Join</span>
+                  </Link>
                 </div>
               </div>
             ))}

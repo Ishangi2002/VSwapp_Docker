@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import SkillCatalog from './SkillCatalog';
 import { HowToSuggestSkill } from './HowToSuggestSkill';
-import { Footer } from '../../Components/Footer';
+import  Footer  from '../../Components/Footer';
 import Navbar2 from '../../Components/Navbar2';
 import axios from 'axios';
 

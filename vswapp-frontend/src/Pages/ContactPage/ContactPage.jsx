@@ -12,7 +12,7 @@ const ContactPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/user-details/by-user/${userId}`, {
+        const res = await axios.get(`http://43.205.199.30:8080/api/user-details/by-user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUser(res.data);

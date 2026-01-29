@@ -12,15 +12,20 @@ const EditProfilePage = () => {
   const token = localStorage.getItem("token");
   const [user, setUser] = useState(null);
 
+  // Define the base URL once at the top for easier maintenance
+  const BASE_URL = "http://43.205.199.30:8080";
+
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!userId || !token) return; // Prevent fetch if user is not logged in
+
       try {
-        // Fetch user and user details together
+        // Fetch user and user details together using the hardcoded IP
         const [userRes, detailsRes] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/user/${userId}`, {
+          axios.get(`${BASE_URL}/api/user/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/user-details/by-user/${userId}`, {
+          axios.get(`${BASE_URL}/api/user-details/by-user/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -41,11 +46,11 @@ const EditProfilePage = () => {
     fetchUserData();
   }, [userId, token]);
 
-  // Save handlers
+  // Save handlers updated with hardcoded IP
   const handleSaveName = async () => {
     try {
       await axios.put(
-        `${import.meta.env.VITE_API_BASE_URL}/api/user-details/by-user/${userId}`,
+        `${BASE_URL}/api/user-details/by-user/${userId}`,
         { firstname: firstName, lastname: lastName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -60,7 +65,7 @@ const EditProfilePage = () => {
   const handleSaveEmail = async () => {
     try {
       await axios.put(
-       `${import.meta.env.VITE_API_BASE_URL}/api/user/${userId}`,
+       `${BASE_URL}/api/user/${userId}`,
         { email },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -74,7 +79,7 @@ const EditProfilePage = () => {
   const handleSavePassword = async () => {
     try {
       await axios.put(
-       `${import.meta.env.VITE_API_BASE_URL}/api/user/${userId}`,
+       `${BASE_URL}/api/user/${userId}`,
         { password },
         { headers: { Authorization: `Bearer ${token}` } }
       );

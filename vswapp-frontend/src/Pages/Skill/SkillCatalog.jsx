@@ -12,7 +12,7 @@ export const SkillCatalog = () => {
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/skill`);
+        const res = await axios.get(`http://43.205.199.30:8080/api/skill`);
         setSkills(res.data);
         setFilteredSkills(res.data); 
       } catch (err) {

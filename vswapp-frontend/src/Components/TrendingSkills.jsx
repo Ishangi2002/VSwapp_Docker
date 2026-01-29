@@ -10,8 +10,8 @@ const TrendingSkills = () => {
   ];
 
   return (
-    /* Background set to your specific #12131a */
-    <section className="py-20 px-6 bg-gradient-to-b from-[#0b1026] to-[#060918] text-center overflow-x-hidden">
+   
+    <section className="pt-0 px-6 bg-gradient-to-b from-[#0b1026] to-[#060918] text-center overflow-x-hidden">
 
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-bold text-white mb-16">Trending Skills</h2>

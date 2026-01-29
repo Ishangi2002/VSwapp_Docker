@@ -57,12 +57,12 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Cleaning up unused Docker images...'
-            sh 'docker image prune -f'
-
-            echo 'Stopping and removing containers...'
-            sh 'docker-compose down || true'
-        }
+    success {
+        // Only clean up dangling (nameless) images, not EVERYTHING
+        sh 'docker image prune -f'
+        echo '🎉 Deployment Successful! App is running.'
+    }
+    failure {
+        echo '❌ Deployment Failed. Check logs above.'
     }
 }

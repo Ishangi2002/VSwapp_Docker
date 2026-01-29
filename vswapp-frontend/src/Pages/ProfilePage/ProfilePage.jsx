@@ -16,42 +16,57 @@ export const ProfilePage = () => {
   const userId = localStorage.getItem("userId");  
   const token = localStorage.getItem("token");
 
-  // Hardcoded Base URL for EC2 Deployment
+  // Hardcoded EC2 IP Address
   const BASE_URL = "http://43.205.199.30:8080";
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!userId || !token) {
-        setError("User not authenticated. Please log in.");
+    const fetchSkills = async () => {
+      if (!userId) {
+        setError("User ID not found. Please log in again.");
         setLoading(false);
         return;
       }
+      console.log("Token:", token); 
+      if (!token) {
+        window.location.href = "/login";
+        return;
+      }
 
+      //get skills by userid 
       try {
-        // Fetch skills and user details in parallel
-        const [skillsRes, userRes] = await Promise.all([
-          axios.get(`${BASE_URL}/api/skill/user/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-          }),
-          axios.get(`${BASE_URL}/api/user-details/by-user/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-        ]);
-
-        setSkills(skillsRes.data);
-        setUser(userRes.data);
+        const response = await axios.get(`${BASE_URL}/api/skill/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        setSkills(response.data); 
       } catch (err) {
-        console.error("Error fetching profile data:", err);
-        setError("Failed to load profile data");
+        console.error("Error fetching skills:", err);
+        setError("Failed to load skills");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    //get userdetails by userid
+    const fetchUserDetails = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/user-details/by-user/${userId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setUser(res.data);
+      } catch (err) {
+        console.error("Error fetching user details:", err);
+      }
+    };
+
+    fetchSkills();
+    fetchUserDetails();
   }, [userId, token]);
 
-  // Delete user account
+  //delete user
   const handleDeleteUser = async () => {
     if (!window.confirm("Are you sure you want to delete your account?")) return;
 
@@ -68,7 +83,7 @@ export const ProfilePage = () => {
     }
   };
 
-  // Delete individual skill
+  //Delete skill
   const handleDelete = async (skillId) => {
     if (!window.confirm("Are you sure you want to delete this skill?")) return;
 
@@ -76,17 +91,24 @@ export const ProfilePage = () => {
       await axios.delete(`${BASE_URL}/api/skill/${skillId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      // Update UI without reload
       setSkills((prev) => prev.filter((skill) => skill.id !== skillId));
     } catch (err) {
       console.error("Error deleting skill:", err);
-      alert("Failed to delete skill.");
+      alert("Failed to delete skill. Please try again.");
     }
   };
 
-  // Submit feedback
+  //Add feedback
   const handleAddFeedback = async () => {
     if (!feedbackText.trim()) {
       alert("Please enter feedback before submitting.");
+      return;
+    }
+
+    if (!user) {
+      alert("User details not loaded. Please wait a moment.");
       return;
     }
 
@@ -98,11 +120,13 @@ export const ProfilePage = () => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       alert("Feedback submitted successfully!");
       setFeedbackText(""); 
+
     } catch (err) {
       console.error("Error submitting feedback:", err);
-      alert("Failed to submit feedback.");
+      alert("Failed to submit feedback. Try again.");
     }
   };
 
@@ -110,80 +134,100 @@ export const ProfilePage = () => {
     <div className="bg-gradient-to-b from-[#090e2d] to-[#111827] min-h-screen text-white">
       <Navbar2 user={user} />
 
-      {/* Profile Header Section */}
+      {/* Background */}
       <div className="flex items-center justify-center mt-20 mb-24">
         <div className="relative bg-blue-950 p-0 rounded-3xl w-[1280px] h-[500px] shadow-lg">
           <img
             src={profileBackground}
-            alt="profile background"
+            alt="profile"
             className="w-full h-[300px] object-cover rounded-t-3xl mt-[-24px]"
           />
 
+          {/* Profile image */}
           <div className="absolute left-10 top-[200px]">
             <img
               src={userImage}
-              alt="user"
-              className="w-40 h-40 rounded-full object-cover border-4 border-blue-950"
+              alt="profile"
+              className="w-40 h-40 rounded-full object-cover"
             />
           </div>
 
+          {/* Edit & Delete Icons */}
           <div className="absolute top-[300px] right-5 flex space-x-3">
             <Link to="/editprofile">
-              <button className="p-2 rounded-full hover:bg-blue-900 transition">
+              <button className="p-2 rounded-full">
                 <PencilSquareIcon className="w-6 h-6 text-white" />
               </button>
             </Link>
-            <button className="bg-red-500 p-2 rounded-full hover:bg-red-700 transition" onClick={handleDeleteUser}>
+
+            <button className="bg-red-500 p-2 rounded-full" onClick={handleDeleteUser}>
               <TrashIcon className="w-6 h-6 text-white" />
             </button>
-          </div>
 
+          </div>
           <div className="absolute left-10 top-[380px]">
-            <h2 className="text-xl font-semibold"> 
-              {user ? `${user.firstname} ${user.lastname}` : "Loading..."}
-            </h2>
+            <h2 className="text-xl font-semibold"> {user ? `${user.firstname} ${user.lastname}` : "Loading..."}</h2>
             <p className="text-white text-sm">{user?.email || ""}</p>
-            <button 
-              onClick={() => { localStorage.clear(); window.location.href="/login"; }} 
-              className="text-white text-sm underline mt-2"
-            >
+            <Link to="/login" className="text-white text-sm underline">
               Logout
-            </button>
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Published Skills Section */}
-      <div className="flex items-center justify-center mt-20 mb-32">
-        <div className="relative bg-blue-950 p-6 rounded-3xl w-[1280px] min-h-[500px] pb-32 shadow-lg">
-          <p className="mt-8 ml-4 text-2xl font-bold">Published skills</p>
-          <p className="ml-4 text-lg text-gray-400">{skills.length} skills found</p>
+      {/* Motivational text */}
+      <div className="text-bold text-5xl font-mono">
+        <span className="ml-48 text-white">You're not</span>{" "}
+        <span className="text-blue-600">just </span>
+        <span className="text-white">growing here;</span>
+        <p className="ml-48">
+          your talents are shining <span className="text-blue-600">worldwide!</span>{" "}
+        </p>
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10 px-4">
+      {/* Published Skills */}
+      <div className="flex items-center justify-center mt-20 mb-32">
+        <div className="relative bg-blue-950 p-0 rounded-3xl w-[1280px] min-h-[700px] pb-32 shadow-lg">
+          <p className="mt-8 ml-10 text-2xl">Published skills</p>
+          <p className="ml-10 text-lg text-gray-400">{skills.length} skills</p>
+
+          <div className="flex flex-wrap ml-20 items-stretch gap-32 px-10 mt-10">
             {loading ? (
-              <p>Loading your skills...</p>
+              <p>Loading skills...</p>
             ) : error ? (
-              <p className="text-red-400">{error}</p>
+              <p>{error}</p>
             ) : skills.length === 0 ? (
-              <p>No skills published yet. Click the + to add one!</p>
+              <p className="ml-6">No skills published yet.</p>
             ) : (
               skills.map((skill) => (
-                <div key={skill.id} className="flex flex-col border border-blue-900 bg-blue-900/30 rounded-3xl overflow-hidden shadow-2xl h-full">
-                  <span className="text-lg p-4 font-semibold">{skill.title}</span>
+                <div
+                  key={skill.id}
+                  className="flex flex-col border border-blue-900 bg-blue-950 rounded-3xl w-[450px] shadow-2xl min-h-[420px] h-full"
+                >
+                  <span className="text-lg ml-6 mt-4 block">{skill.title}</span>
                   {skill.imagePath ? (
-                    <img src={skill.imagePath} alt={skill.title} className="w-full h-48 object-cover" />
+                    <img
+                      src={skill.imagePath}
+                      alt={skill.title}
+                      className="w-full h-[250px] object-cover rounded-b-3xl mt-[10px]"
+                    />
                   ) : (
-                    <div className="w-full h-48 bg-gray-800 flex items-center justify-center">No Image</div>
+                    <div className="w-full h-[200px] bg-gray-700 flex items-center justify-center text-gray-400">
+                      No Image
+                    </div>
                   )}
-                  <div className="p-4 flex-grow text-gray-300">{skill.about}</div>
-                  <div className="flex justify-end p-4 space-x-2">
+                  <div className="ml-5 mt-5 flex-1">
+                    <span>{skill.about}</span>
+                  </div>
+                  <div className="flex justify-end mt-auto mb-4 mr-4 space-x-2">
                     <Link to={`/updateskill/${skill.id}`}>
-                      <button className="p-2 hover:bg-blue-800 rounded-full transition">
+                      <button className="p-2 rounded-full">
                         <PencilSquareIcon className="w-6 h-6 text-white" />
                       </button>
                     </Link>
-                    <button className="bg-red-500 p-2 rounded-full hover:bg-red-700 transition" onClick={() => handleDelete(skill.id)}>
-                      <TrashIcon className="w-6 h-6 text-white" />
+
+                    <button className="bg-red-500 p-2 rounded-full">
+                      <TrashIcon className="w-6 h-6 text-white" onClick={() => handleDelete(skill.id)} />
                     </button>
                   </div>
                 </div>
@@ -191,31 +235,40 @@ export const ProfilePage = () => {
             )}
           </div>
 
+          {/* Add Skill button */}
           <Link to="/addskill">
-            <button className="absolute bottom-8 right-8 flex items-center justify-center w-16 h-16 bg-blue-600 text-white rounded-full shadow-2xl hover:bg-blue-700 transition text-4xl">
-              +
+            <button className="absolute bottom-8 right-[50px] flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition">
+              <span className="text-5xl">+</span>
             </button>
           </Link>
         </div>
       </div>
 
-      {/* Feedback Section */}
-      <div className="flex flex-col items-center mb-32 px-4">
-        <p className="text-xl mb-6 text-center">Let's build a better space together - drop your feedback anytime.</p>
-        <div className="bg-blue-950 p-6 rounded-3xl w-full max-w-[1280px] shadow-lg">
+      {/* Feedback */}
+      <div className="flex items-center justify-center">
+        <span className="text-2xl mt-[-40px]">
+          Let's build a better space together - drop your feedback anytime.
+        </span>
+      </div>
+
+      <div className="flex items-center justify-center mt-10 mb-32">
+        <div className="relative bg-blue-950 p-6 rounded-3xl w-[1280px] h-[280px] shadow-lg text-white">
+
           <textarea
-            className="w-full p-4 rounded-lg text-white bg-blue-900/50 border border-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-            rows="4"
+            id="feedback"
+            rows="5"
+            className="w-full p-4 rounded-lg text-white bg-blue-950 shadow-2xl focus:outline-none"
             placeholder="Drop your feedback here..."
             value={feedbackText}
             onChange={(e) => setFeedbackText(e.target.value)}
           ></textarea>
-          <button 
-            onClick={handleAddFeedback} 
-            className="w-full md:w-64 block mx-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition"
-          >
-            Submit Feedback
-          </button>
+
+          <div className="flex justify-center mt-4">
+            <button onClick={handleAddFeedback} 
+              className="w-96 bg-blue-800 hover:bg-indigo-800 text-white rounded-lg p-3 text-lg ">
+              Add your feedback
+            </button>
+          </div>
         </div>
       </div>
 

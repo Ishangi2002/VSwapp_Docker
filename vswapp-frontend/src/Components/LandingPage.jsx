@@ -5,7 +5,7 @@ import HowItWorks from "./HowItWorks";
 import TrendingSkills from "./TrendingSkills";
 import  OurValues  from "./OurValues";
 import CommunityFeedback from "./CommunityFeedback";
-import { Footer } from "./Footer";
+import Footer from "./Footer";
 
 
 

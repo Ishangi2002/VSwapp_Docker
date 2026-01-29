@@ -12,7 +12,7 @@ export const SignUp = () => {
   e.preventDefault();
   try {
      const [first, last] = name.split(" ");
-    const res = await fetch("http://localhost:8080/api/user", {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({firstname: first || "",lastname: last || "",  name, email, password }),

@@ -30,7 +30,7 @@ export const ProfilePage = () => {
 }
      //get skills by userid 
     try {
-        const response = await axios.get(`http://localhost:8080/api/skill/user/${userId}`,
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/skill/user/${userId}`,
           {
         headers: {
           Authorization: `Bearer ${token}`
@@ -51,8 +51,7 @@ export const ProfilePage = () => {
 
      const fetchUserDetails = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8080/api/user-details/by-user/${userId}`,
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/user-details/by-user/${userId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setUser(res.data);
@@ -70,7 +69,7 @@ export const ProfilePage = () => {
   if (!window.confirm("Are you sure you want to delete your account?")) return;
 
   try {
-    await axios.delete(`http://localhost:8080/api/user/${userId}`, {
+    await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     alert("User deleted successfully");
@@ -89,7 +88,7 @@ export const ProfilePage = () => {
     if (!window.confirm("Are you sure you want to delete this skill?")) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/skill/${skillId}`, {
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/skill/${skillId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -114,7 +113,7 @@ export const ProfilePage = () => {
   }
 
   try {
-    await axios.post("http://localhost:8080/api/feedback", 
+    await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/feedback`, 
       {
         comment: feedbackText,
         userId:userId

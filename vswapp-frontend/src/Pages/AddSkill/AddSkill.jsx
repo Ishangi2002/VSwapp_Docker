@@ -45,7 +45,7 @@ export const AddSkill = () => {
 
   try {
     const skillResponse = await axios.post(
-      "http://localhost:8080/api/skill",
+      `${import.meta.env.VITE_API_BASE_URL}/api/skill`,
       skillData,  
       {
         headers: {
@@ -64,7 +64,7 @@ export const AddSkill = () => {
       formData.append("image", image);
 
       await axios.post(
-        `http://localhost:8080/api/skill/${skillId}/image`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/skill/${skillId}/image`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -83,7 +83,7 @@ export const AddSkill = () => {
 useEffect(() => {
   const userId = localStorage.getItem("userId");
   if (userId) {
-    axios.get(`http://localhost:8080/api/user/${userId}`)
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/user/${userId}`)
       .then(res => setUser(res.data))
       .catch(err => console.error(err));
   }

@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/feedback")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://43.205.199.30:5173")
 public class FeedbackController {
 
     private final FeedbackService feedbackService;

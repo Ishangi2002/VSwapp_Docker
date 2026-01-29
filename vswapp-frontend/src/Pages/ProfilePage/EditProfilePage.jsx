@@ -17,10 +17,10 @@ const EditProfilePage = () => {
       try {
         // Fetch user and user details together
         const [userRes, detailsRes] = await Promise.all([
-          axios.get(`http://localhost:8080/api/user/${userId}`, {
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/user/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get(`http://localhost:8080/api/user-details/by-user/${userId}`, {
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/user-details/by-user/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -45,7 +45,7 @@ const EditProfilePage = () => {
   const handleSaveName = async () => {
     try {
       await axios.put(
-        `http://localhost:8080/api/user-details/by-user/${userId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/user-details/by-user/${userId}`,
         { firstname: firstName, lastname: lastName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -60,7 +60,7 @@ const EditProfilePage = () => {
   const handleSaveEmail = async () => {
     try {
       await axios.put(
-        `http://localhost:8080/api/user/${userId}`,
+       `${import.meta.env.VITE_API_BASE_URL}/api/user/${userId}`,
         { email },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -74,7 +74,7 @@ const EditProfilePage = () => {
   const handleSavePassword = async () => {
     try {
       await axios.put(
-        `http://localhost:8080/api/user/${userId}`,
+       `${import.meta.env.VITE_API_BASE_URL}/api/user/${userId}`,
         { password },
         { headers: { Authorization: `Bearer ${token}` } }
       );

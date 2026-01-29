@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/user-details")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://43.205.199.30:5173")
 public class User_DetailsController {
 
     private User_DetailsService userDetailsService;

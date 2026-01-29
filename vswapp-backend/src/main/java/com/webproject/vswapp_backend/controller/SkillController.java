@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/skill")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://43.205.199.30:5173")
 
 public class SkillController {
     private SkillService skillService;

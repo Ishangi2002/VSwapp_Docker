@@ -18,7 +18,7 @@ export const UpdateSkill = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/skill/${id}`)
+   axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/skill/${id}`)
       .then((res) => {
         const skill = res.data;
         setTitle(skill.title || "");
@@ -50,14 +50,14 @@ export const UpdateSkill = () => {
     };
 
     try {
-      await axios.put(`http://localhost:8080/api/skill/${id}`, updatedSkill);
+     await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/skill/${id}`, updatedSkill);
 
       const fileInput = document.querySelector('input[type="file"]');
       if (fileInput && fileInput.files[0]) {
         const formData = new FormData();
         formData.append("image", fileInput.files[0]);
 
-        await axios.put(`http://localhost:8080/api/skill/${id}/image`, formData, {
+        await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/skill/${id}/image`, formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           }
@@ -73,7 +73,7 @@ export const UpdateSkill = () => {
 useEffect(() => {
   const userId = localStorage.getItem("userId");
   if (userId) {
-    axios.get(`http://localhost:8080/api/user/${userId}`)
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/user/${userId}`)
       .then(res => setUser(res.data))
       .catch(err => console.error(err));
   }

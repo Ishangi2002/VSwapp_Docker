@@ -21,7 +21,7 @@ const TrendingSkills = () => {
             <div
               key={i}
               /* Card background slightly lighter for contrast */
-              className="group bg-[#1c1e26] w-64 h-80 p-8 rounded-3xl border border-gray-800 
+              className="group bg-[#0f172a] w-64 h-80 p-8 rounded-3xl border border-gray-800 
                          flex flex-col items-center justify-start transition-all duration-300 
                          hover:-translate-y-3 hover:scale-105 hover:border-blue-500 
                          hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)]"

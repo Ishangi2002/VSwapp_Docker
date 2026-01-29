@@ -15,7 +15,7 @@ const OurValues = () => {
           {values.map((value, i) => (
             <div
               key={i}
-              className="group bg-[#1c1e26] w-full max-w-sm h-64 p-8 rounded-3xl border border-gray-800 
+              className="group bg-[#0f172a] w-full max-w-sm h-64 p-8 rounded-3xl border border-gray-800 
                          flex flex-col items-center justify-center transition-all duration-300
                          hover:-translate-y-2 hover:border-green-500/50 
                          hover:shadow-[0_20px_40px_rgba(34,197,94,0.1)]"

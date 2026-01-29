@@ -21,7 +21,7 @@ export const HowItWorks = () => {
   ];
 
   return (
-    <section className='py-24 bg-[#030712] text-white'>
+    <section className='py-24 text-white'>
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl font-bold text-center mb-16">How it works</h2>
 

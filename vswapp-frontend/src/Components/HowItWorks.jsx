@@ -23,7 +23,7 @@ export const HowItWorks = () => {
   return (
     <section className='py-24 text-white'>
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-16">How it works</h2>
+        <h2 className="text-4xl text-center mb-16">How it works</h2>
 
         {/* Steps Container */}
         <div className="flex flex-col md:flex-row items-start justify-center gap-12 md:gap-8">

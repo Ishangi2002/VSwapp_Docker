@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export const CommunityFeedback = () => {
-   const [feedbacks, setFeedbacks] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
+
+  // Hardcoded EC2 IP Address
+  const BASE_URL = "http://43.205.199.30:8080";
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/feedback");
+        // Updated from localhost to EC2 BASE_URL
+        const res = await axios.get(`${BASE_URL}/api/feedback`);
         setFeedbacks(res.data);
       } catch (err) {
         console.error("Error fetching feedback:", err);
@@ -35,7 +39,10 @@ export const CommunityFeedback = () => {
               <h3 className="text-base font-semibold mb-6 text-white mt-[-60px] flex items-center justify-start">
                 {feedback.comment}
               </h3>
-              <p className="text-gray-400 text-sm text-right">{feedback.username}</p>
+              {/* Note: Ensure your backend sends 'username' or 'user.firstname' */}
+              <p className="text-gray-400 text-sm text-right">
+                {feedback.username || (feedback.user ? `${feedback.user.firstname}` : "Anonymous")}
+              </p>
             </div>
           ))
         )}

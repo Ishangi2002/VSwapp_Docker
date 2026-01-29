@@ -9,20 +9,25 @@ export const SkillCatalog = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedLevels, setSelectedLevels] = useState([]);
 
-  // Hardcoded EC2 IP Address for the images to load correctly
+  // Hardcoded EC2 IP Address
   const BASE_URL = "http://43.205.199.30:8080";
 
-  // Helper function to redirect image requests from localhost to EC2
+  // Robust helper to fix image paths
   const getImageUrl = (path) => {
-    if (!path) return null;
+    if (!path) return "";
+    
+    // 1. If it contains localhost, swap it for the EC2 IP
     if (path.includes("localhost:8080")) {
       return path.replace("http://localhost:8080", BASE_URL);
     }
-    // In case the path is relative (/uploads/...)
-    if (path.startsWith("/")) {
-      return `${BASE_URL}${path}`;
+    
+    // 2. If it's already a full URL (like from your IP), return it
+    if (path.startsWith("http")) {
+      return path;
     }
-    return path;
+    
+    // 3. If it's a relative path, prepend the BASE_URL
+    return `${BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
   };
 
   useEffect(() => {
@@ -38,18 +43,14 @@ export const SkillCatalog = () => {
     fetchSkills();
   }, []);
 
-  // Update filtered skills whenever filters change
   useEffect(() => {
     let filtered = skills;
-
     if (selectedCategories.length > 0) {
       filtered = filtered.filter(skill => selectedCategories.includes(skill.category));
     }
-
     if (selectedLevels.length > 0) {
       filtered = filtered.filter(skill => selectedLevels.includes(skill.level));
     }
-
     setFilteredSkills(filtered);
   }, [selectedCategories, selectedLevels, skills]);
 
@@ -62,7 +63,6 @@ export const SkillCatalog = () => {
         </div>
 
         <div className="flex ml-24 mt-8 gap-8">
-          {/* Filter Box */}
           <div className="bg-indigo-950 text-white p-8 rounded-3xl shadow-lg w-[350px] h-[650px] flex-shrink-0">
             <FilterBox
               selectedCategories={selectedCategories}
@@ -72,7 +72,6 @@ export const SkillCatalog = () => {
             />
           </div>
 
-          {/* Skills Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
             {filteredSkills.map((skill) => (
               <div
@@ -84,14 +83,16 @@ export const SkillCatalog = () => {
                   alt={skill.title}
                   className="w-full h-[180px] rounded-3xl object-cover"
                   onError={(e) => {
-                    // Fallback if the image still fails to load
-                    e.target.src = "https://via.placeholder.com/320x180?text=No+Image";
+                    // Avoid external placeholder if DNS is failing
+                    e.target.onerror = null; 
+                    e.target.src = "https://via.placeholder.com/320x180?text=Image+Not+Found";
+                    // If even that fails, you might want to use a local asset import
                   }}
                 />
                 <div className="flex justify-between items-center px-4 py-2 ">
                   <span className="text-base">{skill.title}</span>
                   <Link to="/contact">
-                    <span className="text-base cursor-pointer hover:text-blue-400 transition">Join</span>
+                    <span className="text-base cursor-pointer hover:text-blue-400">Join</span>
                   </Link>
                 </div>
               </div>

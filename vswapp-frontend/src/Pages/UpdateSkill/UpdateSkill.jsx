@@ -15,10 +15,8 @@ export const UpdateSkill = () => {
   const [preview, setPreview] = useState(null);
   const [user, setUser] = useState(null);
 
-  // Hardcoded Base URL for your EC2 Deployment
   const BASE_URL = "http://43.205.199.30:8080";
 
-  // Fetch initial skill data
   useEffect(() => {
     axios.get(`${BASE_URL}/api/skill/${id}`)
       .then((res) => {
@@ -32,7 +30,6 @@ export const UpdateSkill = () => {
       .catch((err) => console.error("Error fetching skill details:", err));
   }, [id, BASE_URL]);
 
-  // Handle image preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -42,29 +39,17 @@ export const UpdateSkill = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-
-    const updatedSkill = {
-      title,
-      category,
-      level,
-      about,
-      image: preview
-    };
+    const updatedSkill = { title, category, level, about };
 
     try {
-      // Update text details
       await axios.put(`${BASE_URL}/api/skill/${id}`, updatedSkill);
 
-      // Check if a new file was selected for upload
       const fileInput = document.querySelector('input[type="file"]');
       if (fileInput && fileInput.files[0]) {
         const formData = new FormData();
         formData.append("image", fileInput.files[0]);
-
         await axios.put(`${BASE_URL}/api/skill/${id}/image`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
+          headers: { "Content-Type": "multipart/form-data" }
         });
       }
       navigate("/profilepage");
@@ -74,7 +59,6 @@ export const UpdateSkill = () => {
     }
   };
 
-  // Fetch user data for the Navbar
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     if (userId) {
@@ -89,26 +73,26 @@ export const UpdateSkill = () => {
       <Navbar2 user={user} />
       <div className="flex flex-col md:flex-row items-center justify-between px-8 md:px-24 py-12 gap-10">
 
-        {/* Left Side Info */}
+        {/* Left Side Info - Styled to match AddSkill */}
         <div className="w-full md:w-1/2 text-center md:text-left mt-[-30px]">
           <h1 className="text-6xl font-serif font-bold text-white">Update</h1>
           <p className="text-lg mt-2">Refine your presentation and keep your</p>
           <p className="text-lg">talent profile up to date for the community.</p>
-          <img
-            src={addskill}
-            alt="update illustration"
-            className="mt-6 w-full max-w-[500px] h-auto mx-auto md:ml-[-50px]"
+          <img 
+            src={addskill} 
+            alt="update illustration" 
+            className="mt-6 w-[1500px] h-[500px] ml-[-50px] scale-150" 
           />
         </div>
 
         {/* Right Side Form */}
-        <form onSubmit={handleUpdate} className="w-full md:w-1/2 space-y-6 bg-blue-900/20 p-8 rounded-3xl shadow-xl">
+        <form onSubmit={handleUpdate} className="w-full md:w-1/2 space-y-6">
           <div>
             <label className="block text-lg">Skill Title <span className="text-red-500">*</span></label>
             <input type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-indigo-950 text-white rounded-lg p-3 mt-2 border border-blue-800" />
+              className="w-full bg-indigo-950 text-white rounded-lg p-3 mt-2" />
           </div>
 
           <div>
@@ -116,7 +100,7 @@ export const UpdateSkill = () => {
             <input type="text"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full bg-indigo-950 text-white rounded-lg p-3 mt-2 border border-blue-800" />
+              className="w-full bg-indigo-950 text-white rounded-lg p-3 mt-2" />
           </div>
 
           <div>
@@ -124,7 +108,7 @@ export const UpdateSkill = () => {
             <input type="text"
               value={level}
               onChange={(e) => setLevel(e.target.value)}
-              className="w-full bg-indigo-950 text-white rounded-lg p-3 mt-2 border border-blue-800" />
+              className="w-full bg-indigo-950 text-white rounded-lg p-3 mt-2" />
           </div>
 
           <div>
@@ -132,14 +116,11 @@ export const UpdateSkill = () => {
             <textarea
               value={about}
               onChange={(e) => setAbout(e.target.value)}
-              className="w-full bg-indigo-950 text-white rounded-lg p-3 mt-2 h-28 resize-none border border-blue-800"></textarea>
+              className="w-full bg-indigo-950 text-white rounded-lg p-3 mt-2 h-28 resize-none"></textarea>
           </div>
 
-          {/* Image Upload */}
-          <div className="mb-6">
-            <label className="block text-lg text-white mb-2">
-              Update Image <span className="text-red-500">*</span>
-            </label>
+          <div>
+            <label className="block text-lg">Update Image <span className="text-red-500">*</span></label>
             <input
               type="file"
               accept="image/*"
@@ -151,13 +132,12 @@ export const UpdateSkill = () => {
             {preview && (
               <div className="mt-4">
                 <p className="text-white mb-1">Preview:</p>
-                <img src={preview} alt="Preview" className="w-48 h-48 object-cover rounded-xl border border-blue-500" />
+                <img src={preview} alt="Preview" className="w-48 h-48 object-cover rounded-xl border" />
               </div>
             )}
           </div>
 
-          {/* Submit Button */}
-          <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg p-3 text-lg mt-4 transition duration-300">
+          <button type="submit" className="w-full bg-blue-800 hover:bg-indigo-800 text-white rounded-lg p-3 text-lg mt-4 transition duration-300">
             Save Changes
           </button>
         </form>

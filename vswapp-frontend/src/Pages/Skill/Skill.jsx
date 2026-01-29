@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import SkillCatalog from './SkillCatalog';
@@ -16,7 +16,8 @@ export const Skill = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/user-details/by-user/${userId}`, {
+        // Fixed: Hardcoded backend URL to point to EC2 IP
+        const res = await axios.get(`http://43.205.199.30:8080/api/user-details/by-user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUser(res.data);
@@ -24,21 +25,19 @@ export const Skill = () => {
         console.error(err);
       }
     };
-    fetchUser();
+    if (userId && token) {
+      fetchUser();
+    }
   }, [userId, token]);
 
   return (
-        <div className="bg-gradient-to-b from-[#090e2d] to-[#111827] min-h-screen text-white">
-
-    <div className="flex-1">
-         < Navbar2  user={user}  /> 
-         < SkillCatalog />
-         < HowToSuggestSkill />
-         
-         
-         
-    </div>
-  < Footer />
+    <div className="bg-gradient-to-b from-[#090e2d] to-[#111827] min-h-screen text-white">
+      <div className="flex-1">
+        <Navbar2 user={user} /> 
+        <SkillCatalog />
+        <HowToSuggestSkill />
+      </div>
+      <Footer />
     </div>
   )
 }

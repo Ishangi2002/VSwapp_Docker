@@ -19,7 +19,7 @@ const CommunityFeedback = () => {
 
   return (
     /* py-20 provides consistent vertical spacing between sections */
-    <section className="py-20 px-6 bg-[#030712] text-center">
+    <section className="py-20 px-6 text-center">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-bold text-white mb-16">
           Community Feedback

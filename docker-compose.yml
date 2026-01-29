@@ -65,11 +65,13 @@ services:
       - vswapp-network
     restart: unless-stopped
 
+
 # ==========================
 #  Volumes & Networks
 # ==========================
 volumes:
   mysql_data:
+ 
 
 networks:
   vswapp-network:

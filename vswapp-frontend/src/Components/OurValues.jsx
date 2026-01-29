@@ -8,7 +8,7 @@ const OurValues = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-[#0a0b10]">
+    <section className="py-20 px-6 bg-[#030712]">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-bold text-center text-white mb-16">
           Our Values

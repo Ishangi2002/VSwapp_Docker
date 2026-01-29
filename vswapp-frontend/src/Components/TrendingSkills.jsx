@@ -10,7 +10,7 @@ const TrendingSkills = () => {
   ];
 
   return (
-    <section className="py-16 px-6 bg-[#0a0b10]"> {/* Dark background to match your theme */}
+    <section className="py-16 px-6 bg-[#030712]"> {/* Dark background to match your theme */}
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-bold text-center text-white mb-16">
           Trending Skills

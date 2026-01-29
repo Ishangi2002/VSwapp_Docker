@@ -4,7 +4,7 @@ import HeroSection from "./HeroSection";
 import HowItWorks from "./HowItWorks";
 import TrendingSkills from "./TrendingSkills";
 import { OurValues } from "./OurValues";
-import CommunityFeedback from "./CommunityFeedback";
+import { CommunityFeedback } from "./CommunityFeedback";
 import { Footer } from "./Footer";
 
 

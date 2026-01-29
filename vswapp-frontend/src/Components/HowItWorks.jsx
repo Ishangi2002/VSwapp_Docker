@@ -1,64 +1,87 @@
-import React from 'react'
-import { UserIcon } from '@heroicons/react/24/solid';
+import React from 'react';
+import { UserIcon, MagnifyingGlassIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
+import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 
 export const HowItWorks = () => {
+  const steps = [
+    {
+      title: "Register",
+      desc: "Create an account and specify your skills and interests.",
+      icon: <UserIcon className="w-10 h-10 text-blue-500" />,
+    },
+    {
+      title: "Choose a skill",
+      desc: "Find a skill you're interested in or people to exchange with.",
+      icon: <MagnifyingGlassIcon className="w-10 h-10 text-blue-500" />,
+    },
+    {
+      title: "Start Exchanging",
+      desc: "Communicate and exchange knowledge in a convenient format.",
+      icon: <ArrowsRightLeftIcon className="w-10 h-10 text-blue-500" />,
+    },
+  ];
+
   return (
-    <section className='py-16'>
-    <div className="text-4xl text-center text-white  ">
-      <p >How it works</p>
+    <section className="py-24 bg-[#030712] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* Animated Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-20"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">How it works</h2>
+          <div className="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+        </motion.div>
 
-    {/*first cicle */}  
+        {/* Steps Container - Responsive Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+          
+          {/* Connector Line (visible only on desktop) */}
+          <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 border-t-2 border-dashed border-gray-700 -z-0"></div>
 
-    <div className="flex items-center justify-center mt-20 space-x-8"></div>
-      <div className="flex flex-col items-center text-center ml-[-990px] ">
-        <div className="w-20 h-20 border-2 border-white rounded-full flex items-center justify-center">
-          <UserIcon className="w-10 h-10 text-blue-500" />
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.2, duration: 0.5 }}
+              viewport={{ once: true }}
+              className="relative z-10 flex flex-col items-center text-center group"
+            >
+              {/* Icon Container with Hover Glow */}
+              <div className="w-24 h-24 rounded-full bg-[#0f172a] border-2 border-white flex items-center justify-center mb-6 
+                            transition-all duration-300 group-hover:border-blue-500 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+                {step.icon}
+              </div>
+
+              {/* Text */}
+              <motion.h3 
+                whileHover={{ scale: 1.05 }}
+                className="text-xl font-semibold text-white mb-3"
+              >
+                {step.title}
+              </motion.h3>
+              
+              <p className="text-gray-300 text-sm md:text-base leading-relaxed max-w-[250px]">
+                {step.desc}
+              </p>
+
+              {/* Arrow Decoration (Desktop Only) */}
+              {index < 2 && (
+                <div className="hidden md:block absolute top-8 -right-4 text-4xl text-white opacity-30">
+                  →
+                </div>
+              )}
+            </motion.div>
+          ))}
         </div>
-          <p className="text-lg text-white font-medium mt-4">Register</p>
-          <p className="text-gray-300 text-sm mt-1 w-56">
-              Create an account and specify your skills and interests
-          </p>
-    </div>
-
-    <div
-      className="absolute text-[90px] text-white"
-      style={{ top: '950px', left: '450px' }}>→
-    </div>
-
-    {/*second circle*/}
-    
-    <div className="flex items-center justify-center ml-[-100px] -mt-40"></div>
-      <div className="flex flex-col items-center text-center ml-[10px] ">
-        <div className="w-20 h-20 border-2 border-white rounded-full flex items-center justify-center">
-          🔍
-        </div>
-          <p className="text-lg text-white font-medium mt-4">Choose a skill</p>
-          <p className="text-gray-300 text-sm mt-1 w-56">
-              Find a skill you're interested in or people to exchange with
-          </p>
-    </div>
-
-    <div
-      className="absolute text-[90px] text-white"
-      style={{ top: '955px', left: '950px' }}>→
-    </div>
-
-    {/* Third circle */}
-
-    <div className="flex items-center justify-center ml-[-800px] -mt-40"></div>
-      <div className="flex flex-col items-center text-center ml-[980px] ">
-        <div className="w-20 h-20 border-2 border-white rounded-full flex items-center justify-center">
-          🔁
-        </div>
-          <p className="text-lg text-white font-medium mt-4">Start Exchanging</p>
-          <p className="text-gray-300 text-sm mt-1 w-56">
-              Communicate and exchange knowledge in a convenient format
-          </p>
-    </div> 
-
-    </div>
+      </div>
     </section>
-  )
-}
+  );
+};
 
-export default HowItWorks
+export default HowItWorks;

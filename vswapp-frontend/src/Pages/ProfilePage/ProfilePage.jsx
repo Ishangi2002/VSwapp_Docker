@@ -4,7 +4,7 @@ import profileBackground from "../../assets/Images/profileBackground.jpg";
 import userImage from "../../assets/Images/user.jpg";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
-import { Footer } from "../../Components/Footer";
+import  Footer  from "../../Components/Footer";
 import axios from "axios";
 
 export const ProfilePage = () => {

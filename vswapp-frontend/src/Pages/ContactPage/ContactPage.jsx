@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import Navbar2 from '../../Components/Navbar2';
 import { Link } from 'react-router-dom';
-import { Footer } from '../../Components/Footer';
+import  Footer  from '../../Components/Footer';
 import axios from 'axios';
 
 const ContactPage = () => {

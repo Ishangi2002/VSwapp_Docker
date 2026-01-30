@@ -1,0 +1,11 @@
+# Java/Maven specific ignores
+target/
+.mvn/
+mvnw
+mvnw.cmd
+
+# General ignores
+.git
+.gitignore
+.env
+.idea

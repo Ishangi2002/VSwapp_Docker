@@ -140,7 +140,7 @@ export const ProfilePage = () => {
           <div className="absolute left-10 top-[380px]">
             <h2 className="text-xl font-semibold"> {user ? `${user.firstname} ${user.lastname}` : "Loading..."}</h2>
             <p className="text-white text-sm">{user?.email || ""}</p>
-            <Link to="/login" className="text-black text-sm underline">Logout</Link>
+            <Link to="/login" className="text-white text-sm underline">Logout</Link>
           </div>
         </div>
       </div>

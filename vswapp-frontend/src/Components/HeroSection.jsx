@@ -22,8 +22,8 @@ const HeroSection = () => {
           
         </h1>
         <p className="text-base text-gray-400 mb-14 text-left">
-          Unlock a new way to learn and grow by exchanging<br/>
-          real skills with real people — anytime, anywhere.
+          ISHANGI<br/>
+          SHASHINTHYA
         </p>
 
         <div className="flex gap-10 justify-center md:justify-start mb-10">
